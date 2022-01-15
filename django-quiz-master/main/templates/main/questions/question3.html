@@ -1,0 +1,49 @@
+{% extends 'main/questions/base.html' %}
+
+{% block title %}
+    {{ title }}
+{% endblock %}
+
+{% block content %}
+
+    {% for el in my_quiz %}
+        <div>
+            <h3>{{ el.title }}</h3>
+        </div>
+    {% endfor %}
+
+{% endblock %}
+
+{% block form %}
+    <form action="" method="post">
+        {% csrf_token %}
+        {% for el in answers_db %}
+            <div class="container__checkbox" id="featured-6">
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="A"
+                           id="a" name="answ">
+                    <label class="form-check-label" for="a">{{ el.answer_A }}</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="B"
+                           id="b" name="answ">
+                    <label class="form-check-label" for="b">{{ el.answer_B }}</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="C"
+                           id="c" name="answ">
+                    <label class="form-check-label" for="c">{{ el.answer_C }}</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="D"
+                           id="d" name="answ">
+                    <label class="form-check-label" for="d">{{ el.answer_D }}</label>
+                </div>
+            </div>
+        {% endfor %}
+        <div class="btn__question1">
+            <button type="submit" class="btn btn-success" name="form_type" value="formTwo">Previous</button>
+            <button type="submit" class="btn btn-success" name="form_type" value="formOne">Next question</button>
+        </div>
+    </form>
+{% endblock %}

@@ -1,0 +1,27 @@
+{% extends 'main/base.html' %}
+
+{% block title %}
+    Results page
+{% endblock %}
+
+{% block content %}
+    <h1>Your results: {{ result }} </h1>
+
+    <h4>{{ good }}</h4>
+
+    <form action="" method="post">
+        {% csrf_token %}
+         <button type="submit", class="btn btn-success">Again?</button>
+     </form>
+
+
+    {% for el in correct %}
+    {{ el }}
+    {%  endfor %}
+
+    <br>
+    {% for el in incorrect %}
+    {{ el }}
+    {%  endfor %}
+
+{% endblock %}
