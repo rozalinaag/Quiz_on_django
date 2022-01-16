@@ -97,3 +97,8 @@ form {
     background-color: #00796B;
     border-color: #00796B;
 }
+
+.navbar navbar-expand navbar-dark bg-dark{
+    background-color: #00796B;
+}
+

@@ -1,6 +1,9 @@
 from django.shortcuts import render, redirect
+
+from quiz.dto import AnswersDTO, AnswerDTO, ChoiceDTO, QuestionDTO, QuizDTO
 from .forms import QuestionForm
 from .models import Question, Answers
+from quiz import services
 
 answer_user = {}
 
@@ -83,17 +86,36 @@ def set_answer_user(request, id_question):
     answer_user[id_question - 1] = request.POST.getlist('answ')
 
 
+answer_dto = AnswerDTO('', '')
+choice = ChoiceDTO('', '', '')
+answers_dto = AnswersDTO('', '')
+question_dto = QuestionDTO('', '', '')
+quiz_dto = QuizDTO('', '', '')
+
+
 def results(request):
     if request.method == "POST":
         update_answer_user()
         return redirect('home')
 
     correct_answer = {0: ['B'], 1: ['A'], 2: ['A'], 3: ['C', 'D'], 4: ['A', 'C']}
-    percent = 0
+
+    get_result_from_services = services.QuizResultService(quiz_dto, answers_dto)
+    percent = get_result_from_services.get_result()
+
     for key in answer_user:
         if answer_user[key] == correct_answer[key]:
             percent += 1
 
+    good = user_praise(percent)
+    correct_mass = correctly_user_correct(correct_answer, answer_user)
+    incorrect_mass = correctly_user_incorrect(correct_answer, answer_user)
+
+    return render(request, 'main/results.html', {'result': str(percent / 5), 'good': good, 'correct': correct_mass,
+                                                 'incorrect': incorrect_mass})
+
+
+def user_praise(percent):
     if percent == 5:
         good = "excelente!"
     elif percent == 0:
@@ -106,10 +128,7 @@ def results(request):
         good = "Good!"
     else:
         good = "not bad!"
-
-    correct_mass = correctly_user_correct(correct_answer, answer_user)
-    incorrect_mass = correctly_user_incorrect(correct_answer, answer_user)
-    return render(request, 'main/results.html', {'result': str(percent / 5), 'good': good, 'correct': correct_mass, 'incorrect': incorrect_mass})
+    return good
 
 
 def update_answer_user():
@@ -121,7 +140,7 @@ def correctly_user_correct(correct_answer, answers):
     correct_mass = []
     for key in answer_user:
         if answer_user[key] == correct_answer[key]:
-            correct_mass.append(key+1)
+            correct_mass.append(key + 1)
     return correct_mass
 
 
@@ -129,7 +148,5 @@ def correctly_user_incorrect(correct_answer, answers):
     incorrect_mass = []
     for key in answer_user:
         if answer_user[key] != correct_answer[key]:
-            incorrect_mass.append(key+1)
+            incorrect_mass.append(key + 1)
     return incorrect_mass
-
-

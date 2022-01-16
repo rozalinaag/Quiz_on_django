@@ -1,27 +1,38 @@
 {% extends 'main/base.html' %}
 
 {% block title %}
-    Results page
+Results page
 {% endblock %}
 
 {% block content %}
-    <h1>Your results: {{ result }} </h1>
+<h1>Your results: {{ result }} </h1>
 
-    <h4>{{ good }}</h4>
+<h4>{{ good }}</h4>
 
-    <form action="" method="post">
-        {% csrf_token %}
-         <button type="submit", class="btn btn-success">Again?</button>
-     </form>
+<br>
+<div class="correct">
+    <div class="correct_answer"> Correct answers to questions:
+        {% for el in correct %}
+        {{ el }}
+        ;
+        {% endfor %}
+    </div>
+</div>
+<br>
+<div class="incorrect">
+    <div class="correct_answer"> Wrong answers:
+        {% for el in incorrect %}
+        {{ el }}
+        ;
+        {% endfor %}
+    </div>
+</div>
+<br>
 
+<form action="" method="post">
+    {% csrf_token %}
+    <button type="submit" , class="btn btn-success">Again?</button>
+</form>
 
-    {% for el in correct %}
-    {{ el }}
-    {%  endfor %}
-
-    <br>
-    {% for el in incorrect %}
-    {{ el }}
-    {%  endfor %}
 
 {% endblock %}
